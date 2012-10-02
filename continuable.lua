@@ -154,12 +154,14 @@ function fs.WriteStream:write(chunk) return function (callback)
     return fs.close(self.fd)(callback)
   end
   -- Otherwise write the chunk
-  fs.write(self.fd, self.offset, chunk)(function (err)
+  fs.write(self.fd, self.offset, chunk)(function (err, bytesWritten)
     -- On error, close the file and emit the error
     if err then
       fs.close(self.fd)()
       return callback(err)
     end
+    -- TODO: if bytesWritten is ever less than #chunk, we need to retry
+    self.offset = self.offset + bytesWritten
     callback()
   end)
 end end
