@@ -81,7 +81,7 @@ uv.fs = fs
 
 function fs.open(path, flags, mode) return function (callback)
   -- TODO: register this resource with the resource cleaner
-  native.fsOpen(path, flags, mode or "0644", callback or noop)
+  native.fsOpen(path, flags, mode or tonumber("666", 8), callback or noop)
 end end
 
 function fs.read(fd, offset, size) return function (callback)
